@@ -1,4 +1,4 @@
-# Chord Progression Mutliplication
+# Chord Progression Multiplication
 
 Chord progressions are sequences of chords that express harmony in music, and this idea is the cornerstone of Western tonal music. The goal of this project is to use abstract algebra, specifically the symmetric group's multiplication operation, to manipulate chord progressions as well as explore connections between math and music.
 
