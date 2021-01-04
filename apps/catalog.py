@@ -118,10 +118,10 @@ def update_selected(rows_chosen_ids, display_type_num):
         page_action = "native",
         page_current = 0,
         page_size = 5,
-        # style_data = {
-        #     'whiteSpace': 'normal',
-        #     'height': 'auto'
-        # }
+        style_data = {
+            'whiteSpace': 'normal',
+            'height': 'auto'
+        },
         style_table = {
             'overflowX': 'auto'
         },
