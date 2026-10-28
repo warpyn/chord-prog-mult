@@ -49,17 +49,25 @@ func TestPages(t *testing.T) {
 		wantStatus int
 		wantBody   []string
 	}{
-		{"/", http.StatusOK, nil},
-		{"/catalog", http.StatusOK, nil},
-		{"/approach", http.StatusOK, nil},
+		{"/", http.StatusOK, []string{`hx-post="/multiply"`, `name="prog_f"`, `name="prog_g"`, `id="result"`}},
+		{"/catalog", http.StatusOK, []string{`hx-post="/catalog-multiply"`, `id="catalog-data"`, "We Never Change", `id="catalog-result"`, "/assets/js/catalog.js"}},
+		{"/approach", http.StatusOK, []string{"What is a Chord Progression?", "Multiplying Cycles"}},
 		{"/nope", http.StatusNotFound, []string{"Error 404. Page Not Found."}},
 		{"/catalog/nope", http.StatusNotFound, []string{"Error 404. Page Not Found."}},
+	}
+	layoutBody := []string{
+		"<title>Chord Progression Multiplication</title>",
+		`content="width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5"`,
+		"/assets/css/bootstrap.css",
+		"/assets/css/styles.css",
+		"/assets/js/htmx.min.js",
+		"/chord-prog-mult",
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.path, func(t *testing.T) {
 			rec := serve(t, http.MethodGet, tt.path, nil)
-			assertResponse(t, rec, tt.wantStatus, tt.wantBody...)
+			assertResponse(t, rec, tt.wantStatus, append(layoutBody, tt.wantBody...)...)
 			if got := rec.Header().Get("Content-Type"); got != "text/html; charset=utf-8" {
 				t.Errorf("Content-Type = %q, want text/html", got)
 			}
@@ -75,6 +83,8 @@ func TestAssets(t *testing.T) {
 		{"/assets/css/bootstrap.css", "text/css; charset=utf-8"},
 		{"/assets/js/htmx.min.js", "text/javascript; charset=utf-8"},
 		{"/assets/js/alpine.min.js", "text/javascript; charset=utf-8"},
+		{"/assets/css/styles.css", "text/css; charset=utf-8"},
+		{"/assets/js/catalog.js", "text/javascript; charset=utf-8"},
 	}
 
 	for _, tt := range tests {
