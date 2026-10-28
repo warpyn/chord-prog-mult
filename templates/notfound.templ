@@ -1,5 +1,7 @@
 package templates
 
 templ NotFound() {
-	<div>Error 404. Page Not Found.</div>
+	@Base(pageTitle) {
+		<div>Error 404. Page Not Found.</div>
+	}
 }
