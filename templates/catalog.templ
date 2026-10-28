@@ -1,0 +1,8 @@
+package templates
+
+import "github.com/warpyn/chord-prog-mult/internal/catalog"
+
+templ Catalog(songs []catalog.Song) {
+	<h1>Catalog</h1>
+	<p>{ len(songs) } progressions</p>
+}
