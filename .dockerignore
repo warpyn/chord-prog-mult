@@ -6,13 +6,3 @@ notes.md
 plan.md
 Dockerfile
 .dockerignore
-venv
-*.pyc
-app.py
-index.py
-apps
-algorithms
-datasets
-Procfile
-requirements.txt
-runtime.txt
