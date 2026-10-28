@@ -4,7 +4,7 @@ Chord progressions are sequences of chords that express harmony in music, and th
 
 This website provides a calculator to multiply custom chord progressions and an interactive catalog on the Catalog page to multiply chord progressions found in music. To read more about the mathematical reasoning behind the multiplication idea, visit the Approach page.
 
-The Go version is not deployed yet. A link to the site will be added here when the new host is live.
+This website is live at [https://chordprogmult.warpyn.com/](https://chordprogmult.warpyn.com/). Any new commits pushed to the main branch are automatically deployed.
 
 The website is written in Go. The server uses the standard library for routing, [templ](https://templ.guide) for HTML templates, and [HTMX](https://htmx.org) and [Alpine.js](https://alpinejs.dev) for interactivity. The catalog, the templates, and the static assets are embedded in one static binary, with no database. The original version was written in Python with Dash, NumPy, and pandas; see [MIGRATION.md](MIGRATION.md) for what changed.
 
