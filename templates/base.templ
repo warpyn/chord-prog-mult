@@ -1,0 +1,22 @@
+package templates
+
+const pageTitle = "Chord Progression Multiplication"
+
+templ Base(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5"/>
+			<title>{ title }</title>
+			<link rel="stylesheet" href="/assets/css/bootstrap.css"/>
+			<link rel="stylesheet" href="/assets/css/styles.css"/>
+			<script src="/assets/js/htmx.min.js"></script>
+			<script defer src="/assets/js/alpine.min.js"></script>
+		</head>
+		<body>
+			@Navbar()
+			{ children... }
+		</body>
+	</html>
+}
