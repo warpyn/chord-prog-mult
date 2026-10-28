@@ -1,0 +1,17 @@
+package templates
+
+templ Result(progF, progG, productFG, productGF string) {
+	<div id="result">
+		<div class="mono">(f)(g) = ({ progF })({ progG }) = { productFG }</div>
+		<br/>
+		<div class="mono">(g)(f) = ({ progG })({ progF }) = { productGF }</div>
+	</div>
+}
+
+templ CatalogResult(lineFG, lineGF string) {
+	<div id="catalog-result">
+		<div class="mono">{ lineFG }</div>
+		<br/>
+		<div class="mono">{ lineGF }</div>
+	</div>
+}

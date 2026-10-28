@@ -1,0 +1,96 @@
+package templates
+
+import "github.com/warpyn/chord-prog-mult/internal/catalog"
+
+templ Catalog(songs []catalog.Song) {
+	@Base(pageTitle) {
+		<div class="page" x-data="catalog">
+			<h1>Catalog</h1>
+			<div>
+				<p>Below is a catalog of chord progressions used in music that follow the rules mentioned on the home page. Select any two progressions from the catalog to multiply them and view the output. Multiplication options for chord symbols as well as roman numerals are included.</p>
+			</div>
+			<br/>
+			<form hx-post="/catalog-multiply" hx-target="#catalog-result" hx-swap="outerHTML">
+				<div class="serif">
+					<div class="custom-control custom-radio">
+						<input type="radio" class="custom-control-input" id="column-symbols" name="column" value={ string(catalog.Symbols) } x-model="column" checked/>
+						<label class="custom-control-label" for="column-symbols">Chord Letter Symbols (e.g. "Dm G C")</label>
+					</div>
+					<div class="custom-control custom-radio">
+						<input type="radio" class="custom-control-input" id="column-roman" name="column" value={ string(catalog.Roman) } x-model="column"/>
+						<label class="custom-control-label" for="column-roman">Roman Numeral Analysis (e.g. "ii V I")</label>
+					</div>
+				</div>
+				<br/>
+				<input type="search" class="form-control catalog-search" placeholder="Search the catalog" aria-label="Search the catalog" x-model="query" x-on:keydown.enter.prevent/>
+				<div class="table-wrapper">
+					<table class="catalog-table">
+						<thead>
+							<tr>
+								<th class="select-cell"></th>
+								<template x-for="field in fields" x-bind:key="field.key">
+									<th class="sortable" x-on:click="sortBy(field.key)">
+										<span x-text="sortIndicator(field.key)"></span>
+										<span x-text="field.label"></span>
+									</th>
+								</template>
+							</tr>
+						</thead>
+						<tbody>
+							<template x-for="index in visibleIndices" x-bind:key="index">
+								<tr>
+									<td class="select-cell">
+										<input type="checkbox" x-bind:aria-label="'Select ' + songs[index].Song + ', ' + songs[index].Section" x-bind:checked="selected.includes(index)" x-on:change="toggle(index)"/>
+									</td>
+									<template x-for="field in fields" x-bind:key="field.key">
+										<td x-text="songs[index][field.key]"></td>
+									</template>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<template x-for="index in selected" x-bind:key="index">
+					<input type="hidden" name="selected" x-bind:value="index"/>
+				</template>
+				<br/>
+				<br/>
+				<hr/>
+				<h3>Selected Progressions</h3>
+				<div class="table-wrapper">
+					<table class="catalog-table">
+						<thead>
+							<tr>
+								<th>Song</th>
+								<th>Artist</th>
+								<th>Section</th>
+								<th x-text="chordsLabel">Progression</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template x-for="index in selected" x-bind:key="index">
+								<tr>
+									<td x-text="songs[index].Song"></td>
+									<td x-text="songs[index].Artist"></td>
+									<td x-text="songs[index].Section"></td>
+									<td x-text="chords(index)"></td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<br/>
+				@multiplyButton()
+			</form>
+			<br/>
+			<hr/>
+			<h3>Output</h3>
+			<br/>
+			<div id="catalog-result"></div>
+			<br/>
+			<br/>
+			@templ.JSONScript("catalog-data", songs)
+			<script src="/assets/js/catalog.js"></script>
+		</div>
+	}
+}

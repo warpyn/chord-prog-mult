@@ -1,0 +1,70 @@
+.navbar-custom {
+  background-color: #343a40;
+}
+
+.navbar-home {
+  padding-left: 5%;
+}
+
+.navbar-custom .nav-link {
+  color: white;
+}
+
+.page {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
+}
+
+.serif {
+  font-family: Georgia;
+}
+
+.button-col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.mono {
+  font-family: Courier;
+  font-size: 1.15rem;
+}
+
+.catalog-search {
+  margin-bottom: 0.5rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.catalog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Courier;
+  font-size: 16px;
+}
+
+.catalog-table th,
+.catalog-table td {
+  padding: 2px;
+  border: 1px solid #d3d3d3;
+  text-align: left;
+  white-space: normal;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.catalog-table th {
+  font-weight: normal;
+  background-color: #fafafa;
+}
+
+.catalog-table .select-cell {
+  text-align: center;
+}
+
+.catalog-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
