@@ -1,6 +1,8 @@
 package web
 
 import (
+	"bytes"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -167,11 +169,37 @@ func TestCatalogMultiply(t *testing.T) {
 }
 
 func TestRecoverPanics(t *testing.T) {
-	panicking := http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
-		panic("boom")
-	})
+	var logs bytes.Buffer
+	defaultLogger := slog.Default()
+	slog.SetDefault(slog.New(slog.NewTextHandler(&logs, nil)))
+	t.Cleanup(func() { slog.SetDefault(defaultLogger) })
 
-	rec := httptest.NewRecorder()
-	recoverPanics(panicking).ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/", nil))
-	assertResponse(t, rec, http.StatusInternalServerError)
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /panic", func(http.ResponseWriter, *http.Request) { panic("boom") })
+	mux.HandleFunc("GET /ok", func(http.ResponseWriter, *http.Request) {})
+	server := httptest.NewServer(logRequests(recoverPanics(mux)))
+	defer server.Close()
+
+	for _, tt := range []struct {
+		path       string
+		wantStatus int
+	}{
+		{"/panic", http.StatusInternalServerError},
+		{"/ok", http.StatusOK},
+	} {
+		res, err := http.Get(server.URL + tt.path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		res.Body.Close()
+		if res.StatusCode != tt.wantStatus {
+			t.Errorf("GET %s status = %d, want %d", tt.path, res.StatusCode, tt.wantStatus)
+		}
+	}
+
+	for _, want := range []string{"msg=panic", "panic=boom", "stack=", "path=/panic status=500 duration=", "path=/ok status=200 duration="} {
+		if !strings.Contains(logs.String(), want) {
+			t.Errorf("logs do not contain %q:\n%s", want, logs.String())
+		}
+	}
 }
